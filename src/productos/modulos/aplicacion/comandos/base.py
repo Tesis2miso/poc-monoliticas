@@ -2,7 +2,7 @@ from productos.seedwork.aplicacion.comandos import ComandoHandler
 from productos.modulos.infraestructura.fabricas import FabricaRepositorio
 from productos.modulos.dominio.fabricas import FabricaProductos
 
-class CrearProductoBaseHandler(ComandoHandler):
+class ProductoBaseHandler(ComandoHandler):
     def __init__(self):
         self._fabrica_repositorio: FabricaRepositorio = FabricaRepositorio()
         self._fabrica_productos: FabricaProductos = FabricaProductos()

@@ -62,7 +62,7 @@ docker-compose --profile pulsar stop
 ## Parar db
 
 ```bash
-docker-compose --profile pulsar stop
+docker-compose --profile db stop
 ```
 
 ### Kill proceso que esta usando un puerto

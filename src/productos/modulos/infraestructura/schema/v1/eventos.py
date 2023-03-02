@@ -21,3 +21,22 @@ class EventoStockDisminuido(EventoIntegracion):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+class OrdenCreadaPayload(Record):
+    id_producto = String()
+    id_orden = String()
+    cantidad = Integer()
+    direccion_entrega = String()
+
+class EventoOrdenCreada(EventoIntegracion):
+    id = String(default=str(uuid.uuid4()))
+    time = Long()
+    ingestion = Long(default=time_millis())
+    specversion = String()
+    type = String()
+    datacontenttype = String()
+    service_name = String()
+    data = OrdenCreadaPayload()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)

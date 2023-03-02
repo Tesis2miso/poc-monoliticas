@@ -5,6 +5,7 @@ from pulsar.schema import *
 from productos.modulos.dominio.repositorios import RepositorioProductos
 from productos.modulos.infraestructura.mapeadores import MapeadorProducto
 from productos.modulos.dominio.fabricas import FabricaProductos
+from productos.modulos.infraestructura.dto import Producto as ProductoDTO
 
 class RepositorioProductosSQLAlchemy(RepositorioProductos):
     def __init__(self):
@@ -15,21 +16,27 @@ class RepositorioProductosSQLAlchemy(RepositorioProductos):
         return self._fabrica_productos
 
     def obtener_por_id(self, id: UUID) -> Producto:
-        # TODO
-        raise NotImplementedError
+        producto_dto = db.session.query(ProductoDTO).filter_by(id=str(id)).one()
+        return self.fabrica_productos.crear_objeto(producto_dto, MapeadorProducto())
 
     def obtener_todos(self) -> list[Producto]:
-        # TODO
-        raise NotImplementedError
+        productos_dto = db.session.query(ProductoDTO).all()
+        productos = []
+        for producto_dto in productos_dto:
+            productos.append(
+                self.fabrica_productos.crear_objeto(producto_dto, MapeadorProducto()) 
+            )
+        return productos
 
     def agregar(self, entity: Producto):
         producto_dto = self.fabrica_productos.crear_objeto(entity, MapeadorProducto())
         db.session.add(producto_dto)
 
     def actualizar(self, entity: Producto):
-        # TODO
-        raise NotImplementedError
+        updated_producto_dto = self.fabrica_productos.crear_objeto(entity, MapeadorProducto())
+        producto_dto = db.session.query(ProductoDTO).filter_by(id=str(entity.id)).one()
+        producto_dto.nombre = updated_producto_dto.nombre
+        producto_dto.stock = updated_producto_dto.stock
 
-    def eliminar(self, entity_id: UUID):
-        # TODO
-        raise NotImplementedError
+    def eliminar(self, id: UUID):
+        db.session.query(ProductoDTO).filter_by(id=str(id)).delete()

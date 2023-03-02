@@ -4,6 +4,7 @@ from productos.modulos.dominio.entidades import Producto
 from .dto import Producto as ProductoDTO
 from .excepciones import NoExisteImplementacionParaTipoFabricaExcepcion
 from pulsar.schema import *
+import uuid
 
 class MapeadorProducto(Mapeador):
     _FORMATO_FECHA = '%Y-%m-%dT%H:%M:%SZ'
@@ -21,7 +22,7 @@ class MapeadorProducto(Mapeador):
         return producto_dto
 
     def dto_a_entidad(self, dto: ProductoDTO) -> Producto:
-        producto = Producto(dto.id, dto.fecha_creacion, dto.fecha_actualizacion)
+        producto = Producto(uuid.UUID(dto.id), dto.fecha_creacion, dto.fecha_actualizacion)
         producto.nombre = dto.nombre
         producto.stock = dto.stock        
         return producto

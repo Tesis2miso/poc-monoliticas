@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import request
+import datetime
 import os
 import mysql.connector
 
@@ -16,28 +17,21 @@ def CreateOrden():
     
     if request.method == 'POST':
         try:
-            request.json["id_producto"]
-            request.json["user_id"]
-            request.json["time_stamp"]
-            request.json["cantidad"]
-            request.json["direccion_entrega"]
+            id_producto = request.json["id_producto"]
+            user_id = request.json["user_id"]
+            cantidad = request.json["cantidad"]
+            direccion_entrega = request.json["direccion_entrega"]
         except:
             print("revert or do something")
             return {"message": ""} 
 
 
+
         mycursor = mydb.cursor()
-
-        # Execute a query
-        mycursor.execute("SELECT * FROM ordenes")
-
-        # Fetch the results
-        results = mycursor.fetchall()
-
-        # Print the results
-        for row in results:
-            print(row)
-
+        sql = "INSERT INTO ordenes (id_producto, user_id, time_stamp, cantidad, direccion_entrega) VALUES (%s, %s, %s, %s, %s)"
+        values = (id_producto, user_id, 6, cantidad, direccion_entrega)
+        mycursor.execute(sql, values)
+        mydb.commit()
 
         return {"message": "OK"}
             

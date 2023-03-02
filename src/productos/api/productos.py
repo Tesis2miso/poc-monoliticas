@@ -9,8 +9,8 @@ from productos.seedwork.aplicacion.queries import ejecutar_query
 from productos.modulos.aplicacion.mapeadores import MapeadorProductoDTOJson
 from productos.seedwork.aplicacion.comandos import ejecutar_commando
 from productos.modulos.aplicacion.comandos.crear_producto import CrearProducto
-from productos.modulos.aplicacion.comandos.listar_productos import ListarProductos
-from productos.modulos.aplicacion.comandos.obtener_producto import ObtenerProducto
+from productos.modulos.aplicacion.queries.listar_productos import ListarProductos
+from productos.modulos.aplicacion.queries.obtener_producto import ObtenerProducto
 from productos.modulos.aplicacion.comandos.eliminar_producto import EliminarProducto
 from productos.modulos.infraestructura.schema.v1.comandos import ComandoDismunirStock, ComandoDismunirStockPayload
 from productos.seedwork.infraestructura import utils
@@ -40,24 +40,18 @@ def crear_producto_comando():
 @bp.route('/', methods=('GET',))
 def index():
     try:
-        map_reserva = MapeadorProductoDTOJson()
-        comando = ListarProductos()
-        productos = ejecutar_commando(comando)
-        response = []
-        for producto in productos:
-           response.append(map_reserva.dto_a_externo(producto)) 
-        return jsonify(response)
+        query = ListarProductos()
+        productos = ejecutar_query(query)
+        return jsonify(productos)
     except ExcepcionDominio as e:
         return jsonify({ 'error': str(e)}), 400
     
 @bp.route('/<id>', methods=('GET',))
 def show(id):
     try:
-        map_reserva = MapeadorProductoDTOJson()
-        comando = ObtenerProducto(id)
-        producto = ejecutar_commando(comando)
-        response = map_reserva.dto_a_externo(producto) 
-        return jsonify(response)
+        query = ObtenerProducto(id)
+        producto = ejecutar_query(query)
+        return jsonify(producto)
     except ExcepcionDominio as e:
         return jsonify({ 'error': str(e)}), 400
     

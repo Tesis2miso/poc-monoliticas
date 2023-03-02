@@ -9,6 +9,9 @@ from productos.modulos.aplicacion.mapeadores import MapeadorProducto
 from productos.modulos.infraestructura.repositorios import RepositorioProductos
 from productos.config.db import db
 from productos.seedwork.infraestructura.uow import UnidadTrabajoPuerto
+from productos.modulos.infraestructura.schema.v1.comandos import ComandoAsignarConductor, ComandoAsignarConductorPayload
+from productos.seedwork.infraestructura import utils
+from productos.modulos.infraestructura.despachadores import Despachador
 
 @dataclass
 class DisminuirStock(Comando):

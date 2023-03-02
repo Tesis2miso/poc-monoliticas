@@ -1,7 +1,9 @@
 import os
-
+from pydispatch import dispatcher
 from flask import Flask, render_template, request, url_for, redirect, jsonify, session
 from flask_swagger import swagger
+from productos.modulos.aplicacion.handlers import HandlerProductoIntegracion
+from productos.modulos.dominio.eventos.productos import StockDisminuido
 
 # Identifica el directorio base
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -21,6 +23,9 @@ def comenzar_consumidor(app):
 
     # Suscripción a comandos
     threading.Thread(target=productos.suscribirse_a_comando_disminuir_stock, args=[app]).start()
+
+def comenzar_dispatchers(app):
+    dispatcher.connect(HandlerProductoIntegracion.handle_stock_disminuido, signal=f'{StockDisminuido.__name__}Integracion')
 
 def create_app(configuracion={}):
     # Init la aplicacion de Flask
@@ -47,6 +52,7 @@ def create_app(configuracion={}):
         db.create_all()
         if not app.config.get('TESTING'):
             comenzar_consumidor(app)
+            comenzar_dispatchers(app)
         
         # TODO Saga
         #from productos.modulos.sagas.aplicacion.coordinadores.saga_reservas import CoordinadorReservas

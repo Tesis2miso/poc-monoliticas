@@ -6,9 +6,5 @@ class EventoProducto(EventoDominio):
     ...
 
 @dataclass
-class ProductoCreado(EventoProducto):
-    ...
-
-@dataclass
 class StockDisminuido(EventoProducto):
     ...

@@ -19,7 +19,7 @@ def comenzar_consumidor(app):
     import productos.modulos.infraestructura.consumidores as productos
 
     # Suscripción a eventos
-    threading.Thread(target=productos.suscribirse_a_evento_stock_disminuido, args=[app]).start()
+    # No uso eventos
 
     # Suscripción a comandos
     threading.Thread(target=productos.suscribirse_a_comando_disminuir_stock, args=[app]).start()

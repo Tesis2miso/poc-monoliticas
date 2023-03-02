@@ -3,7 +3,6 @@ import traceback
 import pulsar, _pulsar
 from pulsar.schema import *
 from productos.seedwork.infraestructura import utils
-from productos.modulos.infraestructura.schema.v1.eventos import EventoStockDisminuido, EventoOrdenCreada
 from productos.modulos.infraestructura.schema.v1.comandos import ComandoDismunirStock
 from productos.seedwork.aplicacion.comandos import ejecutar_commando
 from productos.modulos.aplicacion.comandos.disminuir_stock import DisminuirStock
@@ -52,14 +51,6 @@ def suscribirse_a_comando(topico: str, suscripcion: str, schema: Record, funcion
         traceback.print_exc()
         if cliente:
             cliente.close()
-
-def suscribirse_a_evento_stock_disminuido(app=None):
-    def procesar(datos, app):
-        print(datos)
-    suscribirse_a_evento(
-        "evento-stock-disminuido", "sub-stock-disminuido",
-        EventoStockDisminuido, procesar, app
-    )
 
 def suscribirse_a_comando_disminuir_stock(app=None):
     def procesar(datos, app):

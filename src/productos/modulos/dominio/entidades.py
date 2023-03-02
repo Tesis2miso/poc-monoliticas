@@ -15,8 +15,11 @@ class Producto(AgregacionRaiz):
         self.fecha_creacion = datetime.now()
         self.fecha_actualizacion = datetime.now()
     
-    def disminuir_stock(self, cantidad: int):
+    def disminuir_stock(self, cantidad: int, extra_data: dict):
         self.stock = self.stock - cantidad
         self.agregar_evento(
-            StockDisminuido(self.id, datetime.now(), self.id, None, cantidad, "")
+            StockDisminuido(
+                self.id, datetime.now(), self.id,
+                extra_data['id_orden'], cantidad, extra_data['direccion_entrega']
+            )
         )

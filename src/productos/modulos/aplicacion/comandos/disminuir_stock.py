@@ -24,7 +24,10 @@ class DisminuirStockHandler(ProductoBaseHandler):
     def handle(self, comando: DisminuirStock):
         repositorio = self.fabrica_repositorio.crear_objeto(RepositorioProductos)
         producto: Producto = repositorio.obtener_por_id(comando.id_producto)
-        producto.disminuir_stock(comando.cantidad)
+        producto.disminuir_stock(comando.cantidad, {
+            "id_orden": comando.id_orden,
+            "direccion_entrega": comando.direccion_entrega 
+        })
         repositorio.actualizar(producto)
         for evento in producto.eventos:
             dispatcher.send(signal=f'{type(evento).__name__}Integracion', evento=evento)

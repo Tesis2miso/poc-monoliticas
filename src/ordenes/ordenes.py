@@ -1,27 +1,45 @@
 from flask import Flask
 from flask import request
 import os
-import requests
+import mysql.connector
 
 app = Flask(__name__)
 
-@app.route('/exponencial',methods = ['POST'])
-def Exponencial():
-    multiplicacion_url = os.getenv("MULTIPLICACION_MS")
+mydb = mysql.connector.connect(
+  host="34.68.216.107",
+  user="root",
+  database="monoliticas"
+)
+
+@app.route('/orden',methods = ['POST'])
+def CreateOrden():
     
     if request.method == 'POST':
         try:
-            numero , potencia = request.json["numero"], request.json["potencia"]
+            request.json["id_producto"]
+            request.json["user_id"]
+            request.json["time_stamp"]
+            request.json["cantidad"]
+            request.json["direccion_entrega"]
         except:
-            return {"message": ""}
+            print("revert or do something")
+            return {"message": ""} 
 
-        resultado = numero
-        for _ in range(potencia-1):
-            obj = {'num_1': f'{resultado}', 'num_2': f'{numero}'}
-            req = requests.post(multiplicacion_url + '/multiplicar', json = obj)
-            resultado = req.json()["result"]
 
-        return {"message": f"Elevando {numero} a la {potencia} se obtiene {resultado}" , "result": resultado}, 200
+        mycursor = mydb.cursor()
+
+        # Execute a query
+        mycursor.execute("SELECT * FROM ordenes")
+
+        # Fetch the results
+        results = mycursor.fetchall()
+
+        # Print the results
+        for row in results:
+            print(row)
+
+
+        return {"message": "OK"}
             
 
 @app.route('/health',methods = ['GET'])

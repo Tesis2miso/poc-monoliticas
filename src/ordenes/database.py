@@ -1,20 +1,18 @@
 
 
 import mysql.connector
+from session import connect_db
+from datetime import datetime
 
 class DbExecutor:
     def __init__(self):
-        self.db =  mysql.connector.connect(
-                    host="34.68.216.107",
-                    user="root",
-                    database="monoliticas"
-                )
-    
+        pass
 
     def create_order(self, id_producto, user_id, cantidad, direccion_entrega ):
-        mycursor = self.db.cursor()
+        mydb = connect_db()
+        mycursor = mydb.cursor()
         sql = "INSERT INTO ordenes (id_producto, user_id, time_stamp, cantidad, direccion_entrega) VALUES (%s, %s, %s, %s, %s)"
-        values = (id_producto, user_id, 6, cantidad, direccion_entrega)
+        values = (id_producto, user_id, datetime.now(), cantidad, direccion_entrega)
         mycursor.execute(sql, values)
-        self.db.commit()
-        self.db.close()
+        mydb.commit()
+        mydb.close()

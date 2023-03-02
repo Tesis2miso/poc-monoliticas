@@ -7,9 +7,19 @@ from database import DbExecutor
 
 app = Flask(__name__)
 
+
+
+
+
+
+
+
+
+
+
 @app.route('/orden',methods = ['POST'])
 def CreateOrden():
-    
+
     if request.method == 'POST':
         try:
             id_producto = request.json["id_producto"]
@@ -18,7 +28,7 @@ def CreateOrden():
             direccion_entrega = request.json["direccion_entrega"]
         except:
             print("revert or do something")
-            return {"message": ""} 
+            return {"message": ""}
 
         db = DbExecutor()
         db.create_order(id_producto, user_id, cantidad, direccion_entrega)

@@ -1,16 +1,11 @@
 from flask import Flask
 from flask import request
-import datetime
 import os
-import mysql.connector
+import producer
+from eventos import OrdenCreada
+from database import DbExecutor
 
 app = Flask(__name__)
-
-mydb = mysql.connector.connect(
-  host="34.68.216.107",
-  user="root",
-  database="monoliticas"
-)
 
 @app.route('/orden',methods = ['POST'])
 def CreateOrden():
@@ -25,13 +20,13 @@ def CreateOrden():
             print("revert or do something")
             return {"message": ""} 
 
+        db = DbExecutor()
+        db.create_order(id_producto, user_id, cantidad, direccion_entrega)
 
+        orden = OrdenCreada(id_orden = 1, id_producto = id_producto, user_id= user_id, time_stamp = "3", cantidad= cantidad, direccion_entrega= direccion_entrega)
 
-        mycursor = mydb.cursor()
-        sql = "INSERT INTO ordenes (id_producto, user_id, time_stamp, cantidad, direccion_entrega) VALUES (%s, %s, %s, %s, %s)"
-        values = (id_producto, user_id, 6, cantidad, direccion_entrega)
-        mycursor.execute(sql, values)
-        mydb.commit()
+        despachador = producer.Despachador()
+        despachador.publicar_mensaje(orden, "evento-orden")
 
         return {"message": "OK"}
             

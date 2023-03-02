@@ -65,7 +65,14 @@ docker-compose --profile pulsar stop
 docker-compose --profile db stop
 ```
 
-### Kill proceso que esta usando un puerto
+## Consumer tester
+
 ```bash
-fuser -k <puerto>/tcp
+python ./testers/consumer_tester.py
+```
+
+## Producer tester
+
+```bash
+python ./testers/producer_tester.py
 ```

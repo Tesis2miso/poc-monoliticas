@@ -12,6 +12,7 @@ from productos.modulos.aplicacion.comandos.crear_producto import CrearProducto
 from productos.modulos.aplicacion.queries.listar_productos import ListarProductos
 from productos.modulos.aplicacion.queries.obtener_producto import ObtenerProducto
 from productos.modulos.aplicacion.comandos.eliminar_producto import EliminarProducto
+from productos.modulos.aplicacion.comandos.disminuir_stock import DisminuirStock
 from productos.modulos.infraestructura.schema.v1.comandos import ComandoDismunirStock, ComandoDismunirStockPayload
 from productos.seedwork.infraestructura import utils
 from productos.modulos.infraestructura.despachadores import Despachador

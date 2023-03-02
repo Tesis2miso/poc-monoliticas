@@ -7,6 +7,7 @@ db = None
 DB_USERNAME = os.getenv('DB_USERNAME', default="root")
 DB_PASSWORD = os.getenv('DB_PASSWORD', default="root")
 DB_HOSTNAME = os.getenv('DB_HOSTNAME', default="localhost")
+DB_NAME = os.getenv('DB_NAME', default="edadb")
 
 class DatabaseConfigException(Exception):
     def __init__(self, message='Configuration file is Null or malformed'):
@@ -21,7 +22,7 @@ def database_connection(config, basedir=os.path.abspath(os.path.dirname(__file__
     if config.get('TESTING', False) == True:
         return f'sqlite:///{os.path.join(basedir, "database.db")}'
     else:
-        return f'mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOSTNAME}/edadb'
+        return f'mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOSTNAME}/{DB_NAME}'
 
 
 def init_db(app: Flask):

@@ -2,7 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from productos.seedwork.dominio.entidades import AgregacionRaiz
 from datetime import datetime
-from productos.modulos.dominio.eventos.productos import ProductoCreado, StockDisminuido
+from productos.modulos.dominio.eventos.productos import StockDisminuido
 
 @dataclass
 class Producto(AgregacionRaiz):
@@ -14,12 +14,12 @@ class Producto(AgregacionRaiz):
         self.stock = producto.stock
         self.fecha_creacion = datetime.now()
         self.fecha_actualizacion = datetime.now()
-        self.agregar_evento(
-            ProductoCreado(self.id, self.fecha_creacion)
-        )
     
-    def disminuir_stock(self, cantidad: int):
+    def disminuir_stock(self, cantidad: int, extra_data: dict):
         self.stock = self.stock - cantidad
         self.agregar_evento(
-            StockDisminuido(self.id, datetime.now())
+            StockDisminuido(
+                self.id, datetime.now(), self.id,
+                extra_data['id_orden'], cantidad, extra_data['direccion_entrega']
+            )
         )

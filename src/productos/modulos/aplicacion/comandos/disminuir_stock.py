@@ -9,6 +9,9 @@ from productos.modulos.aplicacion.mapeadores import MapeadorProducto
 from productos.modulos.infraestructura.repositorios import RepositorioProductos
 from productos.config.db import db
 from productos.seedwork.infraestructura.uow import UnidadTrabajoPuerto
+from productos.modulos.infraestructura.schema.v1.comandos import ComandoAsignarConductor, ComandoAsignarConductorPayload
+from productos.seedwork.infraestructura import utils
+from productos.modulos.infraestructura.despachadores import Despachador
 
 @dataclass
 class DisminuirStock(Comando):
@@ -21,7 +24,10 @@ class DisminuirStockHandler(ProductoBaseHandler):
     def handle(self, comando: DisminuirStock):
         repositorio = self.fabrica_repositorio.crear_objeto(RepositorioProductos)
         producto: Producto = repositorio.obtener_por_id(comando.id_producto)
-        producto.disminuir_stock(comando.cantidad)
+        producto.disminuir_stock(comando.cantidad, {
+            "id_orden": comando.id_orden,
+            "direccion_entrega": comando.direccion_entrega 
+        })
         repositorio.actualizar(producto)
         for evento in producto.eventos:
             dispatcher.send(signal=f'{type(evento).__name__}Integracion', evento=evento)

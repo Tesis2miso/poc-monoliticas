@@ -30,8 +30,6 @@ class CrearProductoHandler(ProductoBaseHandler):
         producto.crear_producto(producto)
         repositorio = self.fabrica_repositorio.crear_objeto(RepositorioProductos)
         repositorio.agregar(producto)
-        for evento in producto.eventos:
-            dispatcher.send(signal=f'{type(evento).__name__}Integracion', evento=evento)
         db.session.commit()
 
 

@@ -2,6 +2,7 @@ import pulsar
 from pulsar.schema import *
 import uuid
 import time
+import os
 
 def time_millis():
     return int(time.time() * 1000)
@@ -11,7 +12,7 @@ class Despachador:
         ...
 
     def publicar_mensaje(self, mensaje, topico):
-        BROKER_HOST = 'localhost'
+        BROKER_HOST = os.getenv('BROKER_HOST', default="localhost")
         cliente = pulsar.Client(f'pulsar://{BROKER_HOST}:6650')
         publicador = cliente.create_producer(topico, schema=AvroSchema(mensaje.__class__))
         publicador.send(mensaje)
@@ -72,7 +73,7 @@ evento = ComandoDismunirStock(
         specversion="1",
         service_name="1",
         data = ComandoDismunirStockPayload(
-            id_producto="63850469-2e1f-4f16-bb5b-39e4035a00b9",
+            id_producto="4737c6a3-e5c8-4f32-bd39-4a202dc002d5",
             id_orden=str(1),
             cantidad=1,
             direccion_entrega="Direccion"

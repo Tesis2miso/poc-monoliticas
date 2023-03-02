@@ -1,17 +1,30 @@
 
-
-
-
-
 import pulsar
+from pulsar.schema import *
+from utils import broker_host
+from eventos import OrdenCreada
+from database import DbExecutor
 
-client = pulsar.Client('pulsar://localhost:6650')
-consumer = client.subscribe('evento-orden',
-                            subscription_name='evento-orden')
+topico = "evento-ordenes"
 
-while True:
-    msg = consumer.receive()
-    print("Received message: '%s'" % msg.data())
-    consumer.acknowledge(msg)
+def escuchar_mensaje(topico,  schema=Record):
+    cliente = pulsar.Client(f'pulsar://{broker_host()}:6650')
+    consumer = cliente.subscribe(topico,schema=AvroSchema(schema), subscription_name='evento')
+    while True:
+        msg = consumer.receive()
+        message = msg.value()
 
-client.close()
+        consumer.acknowledge(msg)
+
+        id_producto = message.id_orden
+        user_id = message.user_id
+        cantidad = message.cantidad
+        direccion_entrega = message.direccion_entrega
+
+        db = DbExecutor()
+        db.create_order(id_producto, user_id, cantidad, direccion_entrega)
+
+
+    cliente.close()
+
+escuchar_mensaje(topico, OrdenCreada)

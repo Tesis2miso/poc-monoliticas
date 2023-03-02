@@ -13,9 +13,11 @@ from productos.modulos.aplicacion.queries.listar_productos import ListarProducto
 from productos.modulos.aplicacion.queries.obtener_producto import ObtenerProducto
 from productos.modulos.aplicacion.comandos.eliminar_producto import EliminarProducto
 from productos.modulos.aplicacion.comandos.disminuir_stock import DisminuirStock
-from productos.modulos.infraestructura.schema.v1.comandos import ComandoDismunirStock, ComandoDismunirStockPayload
+from productos.modulos.infraestructura.schema.v1.comandos import ComandoCrearProducto, ComandoCrearProductoPayload
 from productos.seedwork.infraestructura import utils
 from productos.modulos.infraestructura.despachadores import Despachador
+import uuid
+from productos.config.config import Config
 
 bp = api.crear_blueprint('productos', '/productos')
 
@@ -23,17 +25,21 @@ bp = api.crear_blueprint('productos', '/productos')
 def crear_producto_comando():
     try:
         session['uow_metodo'] = 'pulsar'
-        map_reserva = MapeadorProductoDTOJson()
         producto_dict = request.json
-        producto_dto = map_reserva.externo_a_dto(producto_dict)
-        comando = CrearProducto(
-            producto_dto.fecha_creacion,
-            producto_dto.fecha_actualizacion,
-            producto_dto.id,
-            producto_dto.nombre,
-            producto_dto.stock
+        despachador = Despachador()
+        comando = ComandoCrearProducto(
+            id = str(uuid.uuid4()),
+            time=utils.time_millis(),
+            ingestion=utils.time_millis(),
+            datacontenttype=ComandoCrearProductoPayload.__name__,
+            specversion="1",
+            service_name="1",
+            data = ComandoCrearProductoPayload(
+                nombre=producto_dict['nombre'],
+                stock=producto_dict['stock'],
+            ) 
         )
-        ejecutar_commando(comando)
+        despachador.publicar_mensaje(comando, "comando-crear-producto")
         return jsonify({ 'mssg': 'Procesando mensaje'}), 203
     except ExcepcionDominio as e:
         return jsonify({ 'error': str(e)}), 400

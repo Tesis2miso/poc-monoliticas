@@ -20,6 +20,20 @@ class ComandoDismunirStock(ComandoIntegracion):
     service_name = String()
     data = ComandoDismunirStockPayload()
 
+class ComandoCrearProductoPayload(ComandoIntegracion):
+    nombre = String()
+    stock = Integer()
+
+class ComandoCrearProducto(ComandoIntegracion):
+    id = String(default=str(uuid.uuid4()))
+    time = Long()
+    ingestion = Long(default=time_millis())
+    specversion = String()
+    type = String()
+    datacontenttype = String()
+    service_name = String()
+    data = ComandoCrearProductoPayload()
+
 class ComandoAsignarConductorPayload(ComandoIntegracion):
     id_producto = String()
     id_orden = String()

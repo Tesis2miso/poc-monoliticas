@@ -48,6 +48,20 @@ class ComandoDismunirStock(ComandoIntegracion):
     service_name = String()
     data = ComandoDismunirStockPayload()
 
+class ComandoCrearProductoPayload(ComandoIntegracion):
+    nombre = String()
+    stock = Integer()
+
+class ComandoCrearProducto(ComandoIntegracion):
+    id = String(default=str(uuid.uuid4()))
+    time = Long()
+    ingestion = Long(default=time_millis())
+    specversion = String()
+    type = String()
+    datacontenttype = String()
+    service_name = String()
+    data = ComandoCrearProductoPayload()
+
 despachador = Despachador()
 
 # PROBAR
@@ -58,7 +72,7 @@ evento = ComandoDismunirStock(
         specversion="1",
         service_name="1",
         data = ComandoDismunirStockPayload(
-            id_producto="02081bc3-52b5-4fb1-afbc-d251ebd157bd",
+            id_producto="63850469-2e1f-4f16-bb5b-39e4035a00b9",
             id_orden=str(1),
             cantidad=1,
             direccion_entrega="Direccion"
@@ -66,4 +80,15 @@ evento = ComandoDismunirStock(
     )
 despachador.publicar_mensaje(evento, "comando-disminuir-stock")
 
-ComandoDismunirStockPayload()
+#evento = ComandoCrearProducto(
+#        time=time_millis(),
+#        ingestion=time_millis(),
+#        datacontenttype=ComandoCrearProductoPayload.__name__,
+#        specversion="1",
+#        service_name="1",
+#        data = ComandoCrearProductoPayload(
+#            nombre="Buenas1",
+#            stock=13,
+#        ) 
+#    )
+#despachador.publicar_mensaje(evento, "comando-crear-producto")

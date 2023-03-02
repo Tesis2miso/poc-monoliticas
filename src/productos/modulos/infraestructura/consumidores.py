@@ -3,9 +3,11 @@ import traceback
 import pulsar, _pulsar
 from pulsar.schema import *
 from productos.seedwork.infraestructura import utils
-from productos.modulos.infraestructura.schema.v1.comandos import ComandoDismunirStock
+from productos.modulos.infraestructura.schema.v1.comandos import ComandoDismunirStock, ComandoCrearProducto
 from productos.seedwork.aplicacion.comandos import ejecutar_commando
 from productos.modulos.aplicacion.comandos.disminuir_stock import DisminuirStock
+from productos.modulos.aplicacion.comandos.crear_producto import CrearProducto
+from productos.modulos.aplicacion.mapeadores import MapeadorProductoDTOJson
 
 def suscribirse_a_evento(topico: str, suscripcion: str, schema: Record, funcion_evento, app=None):
     cliente = None
@@ -67,4 +69,27 @@ def suscribirse_a_comando_disminuir_stock(app=None):
     suscribirse_a_comando(
         "comando-disminuir-stock", "sub-com-disminuir-stock",
         ComandoDismunirStock, procesar, app
+    )
+
+def suscribirse_a_comando_crear_producto(app=None):
+    def procesar(datos, app):
+        try:
+            with app.app_context():
+                map_reserva = MapeadorProductoDTOJson()
+                producto_dto = map_reserva.externo_a_dto({
+                    'nombre': datos.nombre,
+                    'stock': datos.stock
+                })
+                comando = CrearProducto(
+                    producto_dto.fecha_creacion,
+                    producto_dto.fecha_actualizacion, producto_dto.id,
+                    producto_dto.nombre, producto_dto.stock
+                )
+                ejecutar_commando(comando)
+        except:
+            logging.error('ERROR: Procesando eventos!')
+            traceback.print_exc()
+    suscribirse_a_comando(
+        "comando-crear-producto", "sub-com-crear-producto",
+        ComandoCrearProducto, procesar, app
     )

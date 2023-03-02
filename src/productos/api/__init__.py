@@ -22,6 +22,7 @@ def comenzar_consumidor(app):
     # No uso eventos
 
     # Suscripción a comandos
+    threading.Thread(target=productos.suscribirse_a_comando_crear_producto, args=[app]).start()
     threading.Thread(target=productos.suscribirse_a_comando_disminuir_stock, args=[app]).start()
 
 def comenzar_dispatchers(app):

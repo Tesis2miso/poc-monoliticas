@@ -43,11 +43,11 @@ Justificacion
 
 ## Descripción de actividades
 
-- Andres Baron
-- Emilson Quintero
-- Laura Bello
-- William Ravelo
-- Todos
+- **Andres Baron**: Realizó el componente de ordenes junto con su implementación de almacenamiento, conexión y uso de la cola de mensajes, de igual forma configuración de Apache Pulsar en la nube.
+- **Emilson Quintero**: Realizó el componente de BFF junto con su conexión y uso de cola de mensajes al igual que implementación necesaria para cumplir con escenario de calidad #3.
+- **Laura Bello**: Realizó el componente de conductores junto con su implementación de almacenamiento, conexión y uso de la cola de mensajes.
+- **William Ravelo M**: Realizó el componente de productos junto con su implementación de almacenamiento, conexión y uso de la cola de mensajes.
+- **Todos**: Integración y pruebas de todos los componentes al igual que el flujo de creación de ordenes y su confirmación. De igual forma, despliegue de todos los componentes en la nube para luego su documentación y pruebas de escenarios de calidad.
 
 ## Requisitos
 

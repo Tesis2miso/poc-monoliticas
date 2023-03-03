@@ -48,3 +48,14 @@ class ComandoMarcarListoDespachoPayload(ComandoIntegracion):
     id_orden = String()
     id_conductor = String()
     direccion_entrega = String()
+
+
+class ComandoMarcarListoDespacho(ComandoIntegracion):
+    id = String(default=str(uuid.uuid4()))
+    time = Long()
+    ingestion = Long(default=time_millis())
+    specversion = String()
+    type = String()
+    datacontenttype = String()
+    service_name = String()
+    data = ComandoMarcarListoDespachoPayload()

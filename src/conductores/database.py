@@ -24,7 +24,7 @@ class DbExecutor:
     def get_unassigned_conductor(self):
         mydb = connect_db()
         mycursor = mydb.cursor()
-        sql = "SELECT id_conductor FROM conductores WHERE id_orden IS NULL"
+        sql = "SELECT id_conductor FROM conductores WHERE id_orden IS NULL limit 1"
         mycursor.execute(sql)
         id_conductor = mycursor.fetchone()
         mydb.commit()

@@ -20,7 +20,7 @@ class DbExecutor:
     def update_order_status(self, id_orden, id_conductor):
         mydb = connect_db()
         mycursor = mydb.cursor()
-        sql = "UPDATE ordenes SET estado = 'iniciada',id_conductor = %s  where id_orden = %s"
+        sql = "UPDATE ordenes SET estado = 'iniciada',id_driver = %s  where id_orden = %s"
         values = (id_conductor, id_orden)
         mycursor.execute(sql, values)
         mydb.commit()
@@ -43,7 +43,7 @@ class DbExecutorReplica:
     def update_order_status(self, id_orden, id_conductor):
         mydb = connect_db_replica()
         mycursor = mydb.cursor()
-        sql = "UPDATE ordenes SET estado = 'iniciada',id_conductor = %s  where id_orden = %s"
+        sql = "UPDATE ordenes SET estado = 'iniciada',id_driver = %s  where id_orden = %s"
         values = (id_conductor, id_orden)
         mycursor.execute(sql, values)
         mydb.commit()

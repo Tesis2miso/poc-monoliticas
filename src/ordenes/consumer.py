@@ -2,10 +2,10 @@ import pulsar
 from pulsar.schema import *
 import uuid
 from utils import broker_host, time_millis
-from eventos import OrdenCreada, ComandoDismunirStockPayload, ComandoDismunirStock, ComandoMarcarListoDespachoPayload
+from eventos import OrdenCreada, ComandoDismunirStockPayload, ComandoDismunirStock, ComandoMarcarListoDespachoPayload, ComandoMarcarListoDespacho
 from database import DbExecutor, DbExecutorReplica
 from datetime import datetime
-
+import threading
 import producer
 
 topico = "evento-ordenes-2"
@@ -68,11 +68,11 @@ def escuchar_mensaje_conductores(topico, schema=Record):
 
         consumer.acknowledge(msg)
 
-        id_orden = message.id_orden
-        id_conductor = message.id_conductor
-        direccion_entrega = message.direccion_entrega
+        id_orden = message.data.id_orden
+        id_conductor = message.data.id_conductor
+        direccion_entrega = message.data.direccion_entrega
 
-        print(f"consumed message driver {id_producto}")
+        print(f"consumed message driver {id_conductor}")
 
         db = DbExecutor()
         db.update_order_status(id_orden, id_conductor)
@@ -87,7 +87,6 @@ def escuchar_mensaje_conductores(topico, schema=Record):
 
 
 
+threading.Thread(target=escuchar_mensaje, args=[topico, OrdenCreada]).start()
 
-
-escuchar_mensaje(topico, OrdenCreada)
-escuchar_mensaje_conductores("comando-marcar-listo-despacho", ComandoMarcarListoDespachoPayload)
+escuchar_mensaje_conductores("comando-marcar-listo-despacho-2", ComandoMarcarListoDespacho)

@@ -27,6 +27,10 @@ En este diagrama se pueden ver los contextos acotados implementados junto con su
 
 ## Escenarios de calidad a probar
 
+- [Escenario calidad #3 (Modificabilidad)](https://github.com/Tesis2miso/poc-monoliticas/wiki/Escenario-calidad-%233-(Modificabilidad))
+- [Escenario calidad #6 (Escalabilidad)](https://github.com/Tesis2miso/poc-monoliticas/wiki/Escenario-calidad-%236-(Escalabilidad))
+- [Escenario calidad #8 (Disponibilidad)](https://github.com/Tesis2miso/poc-monoliticas/wiki/Escenario-calidad-%238-(Disponibilidad))
+
 ## Justificaciones
 
 ##### Se justifica correctamente los tipos de eventos a utilizar (integración o carga de estado). Ello incluye la definición de los esquemas y evolución de los mismos.

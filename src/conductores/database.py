@@ -8,7 +8,7 @@ class DbExecutor:
     def create_table_conductor(self):
         mydb = connect_db()
         mycursor = mydb.cursor()
-        sql = "CREATE TABLE conductores (id_conductor INT AUTO_INCREMENT PRIMARY KEY, id_orden INT NULLABLE, direccion_entrega VARCHAR(255) NULLABLE, time_stamp VARCHAR(255) NULLABLE)"
+        sql = "CREATE TABLE conductores (id_conductor INT AUTO_INCREMENT PRIMARY KEY, id_orden INT NULL, direccion_entrega VARCHAR(255) NULL, time_stamp VARCHAR(255) NULL)"
         mycursor.execute(sql)
         mydb.commit()
         mydb.close()

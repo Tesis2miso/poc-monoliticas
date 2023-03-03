@@ -1,4 +1,5 @@
 import os
+import time
 
 PULSAR_ENV: str = 'BROKER_HOST'
 DB_ENV: str = 'DB_HOST'
@@ -20,3 +21,7 @@ def db_user():
 
 def db_database():
     return os.getenv(DB_DATABASE, default="monoliticas")
+
+
+def time_millis():
+    return int(time.time() * 1000)

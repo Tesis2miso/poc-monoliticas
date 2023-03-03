@@ -1,10 +1,10 @@
 import pulsar
 from pulsar.schema import *
 from utils import broker_host
-from eventos import StockDisminuido
+from eventos import ComandoAsignarConductor, ComandoMarcarListoDespacho, ComandoMarcarListoDespachoPayload
 from database import DbExecutor
-
-topico = "evento-stock"
+from utils import time_millis
+import producer
 
 
 def escuchar_mensaje(topico, schema=Record):
@@ -16,18 +16,35 @@ def escuchar_mensaje(topico, schema=Record):
 
         consumer.acknowledge(msg)
 
-        id_orden = message.id_orden
-        direccion_entrega = message.direccion_entrega
+        id_orden = message.data.id_orden
+        direccion_entrega = message.data.direccion_entrega
         db = DbExecutor()
 
         id_conductor = db.get_unassigned_conductor()
 
         if id_conductor:
             db.assign_conductor(id_conductor, id_orden, direccion_entrega)
+
+            evento = ComandoMarcarListoDespacho(
+                time=time_millis(),
+                ingestion=time_millis(),
+                datacontenttype=ComandoMarcarListoDespachoPayload.__name__,
+                specversion="1",
+                service_name="1",
+                data=ComandoMarcarListoDespachoPayload(
+                    id_orden=id_orden,
+                    id_conductor=id_conductor,
+                    direccion_entrega=direccion_entrega
+                )
+            )
+
+            despachador = producer.Despachador()
+            despachador.publicar_mensaje(evento, "comando-marcar-listo-despacho")
+
         else:
             raise Exception("No hay ningun conductor disponible, regla de negocio")
 
     cliente.close()
 
 
-escuchar_mensaje(topico, StockDisminuido)
+escuchar_mensaje("evento-asignar-conductor", ComandoAsignarConductor)

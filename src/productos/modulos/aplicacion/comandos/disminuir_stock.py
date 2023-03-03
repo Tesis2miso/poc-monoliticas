@@ -21,7 +21,7 @@ class DisminuirStock(Comando):
     direccion_entrega: str
 
 class DisminuirStockHandler(ProductoBaseHandler):    
-    def handle(self, comando: DisminuirStock):
+    def handle(self, comando: DisminuirStock) -> Producto:
         repositorio = self.fabrica_repositorio.crear_objeto(RepositorioProductos)
         producto: Producto = repositorio.obtener_por_id(comando.id_producto)
         producto.disminuir_stock(comando.cantidad, {
@@ -32,9 +32,10 @@ class DisminuirStockHandler(ProductoBaseHandler):
         for evento in producto.eventos:
             dispatcher.send(signal=f'{type(evento).__name__}Integracion', evento=evento)
         db.session.commit()
+        return producto
 
 @comando.register(DisminuirStock)
-def ejecutar_comando_disminuir_stock(comando: DisminuirStock):
+def ejecutar_comando_disminuir_stock(comando: DisminuirStock) -> Producto:
     handler = DisminuirStockHandler()
-    handler.handle(comando)
+    return handler.handle(comando)
     

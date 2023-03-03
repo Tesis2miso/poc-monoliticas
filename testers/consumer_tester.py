@@ -66,4 +66,5 @@ def suscribirse_a_topico(topico: str, suscripcion: str):
 
 
 # PROBAR
-suscribirse_a_topico("comando-asignar-conductor", "sub-com-asignar-conductor")
+#suscribirse_a_topico("comando-asignar-conductor", "sub-com-asignar-conductor")
+suscribirse_a_topico("comando-disminuir-stock", "sub-com-disminuir-stock")

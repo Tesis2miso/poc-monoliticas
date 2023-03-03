@@ -18,6 +18,8 @@ from productos.seedwork.infraestructura import utils
 from productos.modulos.infraestructura.despachadores import Despachador
 import uuid
 from productos.config.config import Config
+from productos.modulos.infraestructura.proyecciones import ProyeccionEliminarProducto
+from productos.seedwork.infraestructura.proyecciones import ejecutar_proyeccion
 
 bp = api.crear_blueprint('productos', '/productos')
 
@@ -67,6 +69,9 @@ def destroy(id):
     try:
         comando = EliminarProducto(id)
         ejecutar_commando(comando)
+        ejecutar_proyeccion(
+            ProyeccionEliminarProducto(id)
+        )
         return jsonify({ 'mssg': 'ok'})
     except ExcepcionDominio as e:
         return jsonify({ 'error': str(e)}), 400

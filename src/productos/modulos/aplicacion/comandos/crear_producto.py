@@ -19,7 +19,7 @@ class CrearProducto(Comando):
     stock: int = 0
 
 class CrearProductoHandler(ProductoBaseHandler):    
-    def handle(self, comando: CrearProducto):
+    def handle(self, comando: CrearProducto) -> Producto:
         producto_dto = ProductoDTO(
                 fecha_actualizacion=comando.fecha_actualizacion
             ,   fecha_creacion=comando.fecha_creacion
@@ -31,10 +31,11 @@ class CrearProductoHandler(ProductoBaseHandler):
         repositorio = self.fabrica_repositorio.crear_objeto(RepositorioProductos)
         repositorio.agregar(producto)
         db.session.commit()
+        return producto
 
 
 @comando.register(CrearProducto)
-def ejecutar_comando_crear_producto(comando: CrearProducto):
+def ejecutar_comando_crear_producto(comando: CrearProducto) -> Producto:
     handler = CrearProductoHandler()
-    handler.handle(comando)
+    return handler.handle(comando)
     

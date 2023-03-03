@@ -6,6 +6,7 @@ from productos.modulos.dominio.repositorios import RepositorioProductos
 from productos.modulos.infraestructura.mapeadores import MapeadorProducto
 from productos.modulos.dominio.fabricas import FabricaProductos
 from productos.modulos.infraestructura.dto import Producto as ProductoDTO
+from productos.config.read_db import session as read_session
 
 class RepositorioProductosSQLAlchemy(RepositorioProductos):
     def __init__(self):
@@ -16,11 +17,13 @@ class RepositorioProductosSQLAlchemy(RepositorioProductos):
         return self._fabrica_productos
 
     def obtener_por_id(self, id: UUID) -> Producto:
-        producto_dto = db.session.query(ProductoDTO).filter_by(id=str(id)).one()
+        read_session.commit()
+        producto_dto = read_session.query(ProductoDTO).filter_by(id=str(id)).one()
         return self.fabrica_productos.crear_objeto(producto_dto, MapeadorProducto())
 
     def obtener_todos(self) -> list[Producto]:
-        productos_dto = db.session.query(ProductoDTO).all()
+        read_session.commit()
+        productos_dto = read_session.query(ProductoDTO).all()
         productos = []
         for producto_dto in productos_dto:
             productos.append(

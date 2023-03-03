@@ -59,11 +59,43 @@ class ComandoAsignarConductor(ComandoIntegracion):
     data = ComandoAsignarConductorPayload()
 ```
 
-##### Justificó e implementó alguna de las topologías para la administración de dato
+##### Justificó e implementó alguna de las topologías para la administración de datos
 
 Para el manejo de datos, en todos los componentes a excepción del BFF que no almacena datos, implementamos una topología descentralizada indicando que cada microservicio tiene su propia base de datos que no es utilizada por ningún otro componente, esto dado que utilizar esta topología nos permite escalar los microservicios de forma independiente haciendo más fácil y menos riesgoso introducir cambios. De igual forma, nos permitió trabajar de forma aislada e independiente a cada integrante del equipo ya que cada uno es owner de sus datos y no se comparte este ownership.
 
-Finalmente tanto en el componente de ordenes como el de productos además de hacer evidente el patrón CQRS a nivel de código también se hace evidente a nivel de datos ya que se tiene una base de datos dedicada solo a escritura y otra base de datos de solo lectura que se sincroniza a partir de las escrituras permitiendo así recibir un alto volumen de lecturas sin afectar la base de datos de escritura.
+Finalmente tanto en el componente de ordenes como el de productos además de hacer evidente el patrón CQRS a nivel de código también se hace evidente a nivel de datos ya que se tiene una base de datos dedicada solo a escritura y otra base de datos de solo lectura que se sincroniza a partir de las escrituras permitiendo así recibir un alto volumen de lecturas sin afectar la base de datos de escritura. Para todos los componentes usamos CRUD en vez de evento sourcing ya que en el flujo que escogimos no es necesario tener un registro tipo append-only por que el orden en que llegan los mensajes no afecta el resultado, igualmente, no se requiere el registro de los eventos que han llegado por el momento.
+
+A continuacion se presenta un ejemplo de proyección usada en el componente de productos.
+
+```python
+class ProyeccionModificacionProducto(ProyeccionProducto):
+    def __init__(self, id, nombre, stock, fecha_creacion, fecha_actualizacion):
+        self.id = id
+        self.nombre = nombre
+        self.stock = stock
+        self.fecha_creacion = fecha_creacion
+        self.fecha_actualizacion = fecha_actualizacion
+
+    def ejecutar(self, session=None):
+        if not session:
+            logging.error('ERROR: DB del app no puede ser nula')
+            return
+
+        record = session.query(ProductoDTO).filter_by(id=self.id).one_or_none()
+        if record != None:
+            record.nombre = self.nombre
+            record.stock = self.stock
+            record.fecha_actualizacion = self.fecha_actualizacion
+        else:
+            new_record = ProductoDTO()
+            new_record.fecha_creacion = self.fecha_creacion
+            new_record.fecha_actualizacion = self.fecha_actualizacion
+            new_record.id = self.id
+            new_record.nombre = self.nombre
+            new_record.stock = self.stock
+            session.add(new_record)
+        session.commit()
+```
 
 ## Descripción de actividades
 

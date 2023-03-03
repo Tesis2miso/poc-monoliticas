@@ -1,3 +1,5 @@
+import uuid
+
 from flask import Flask
 from flask import request
 import os
@@ -9,7 +11,7 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-topico = "evento-ordenes"
+topico = "evento-ordenes-2"
 
 @app.route('/orden',methods = ['POST'])
 def CreateOrden():
@@ -27,12 +29,12 @@ def CreateOrden():
         #db = DbExecutor()
         #db.create_order(id_producto, user_id, cantidad, direccion_entrega)
 
-        orden = OrdenCreada(id_orden = 1, id_producto = id_producto, user_id= user_id, time_stamp = str(datetime.now()), cantidad= cantidad, direccion_entrega= direccion_entrega)
+        orden = OrdenCreada(id_orden = str(uuid.uuid4()), id_producto = id_producto, user_id= user_id, time_stamp = str(datetime.now()), cantidad= cantidad, direccion_entrega= direccion_entrega)
 
         despachador = producer.Despachador()
         despachador.publicar_mensaje(orden, topico)
 
-        return {"message": "OK"}
+        return {"message":f"{id_producto}"}
             
 
 @app.route('/health',methods = ['GET'])

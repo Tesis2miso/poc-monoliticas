@@ -8,11 +8,11 @@ class DbExecutor:
     def __init__(self):
         pass
 
-    def create_order(self, id_producto, user_id, cantidad, direccion_entrega ):
+    def create_order(self,id_orden, id_producto, user_id, cantidad, direccion_entrega ):
         mydb = connect_db()
         mycursor = mydb.cursor()
-        sql = "INSERT INTO ordenes (id_producto, user_id, time_stamp, cantidad, direccion_entrega) VALUES (%s, %s, %s, %s, %s)"
-        values = (id_producto, user_id, datetime.now(), cantidad, direccion_entrega)
+        sql = "INSERT INTO ordenes (id_orden, id_producto, user_id, time_stamp, cantidad, direccion_entrega) VALUES (%s, %s, %s, %s, %s, %s)"
+        values = (id_orden, id_producto, user_id, datetime.now(), cantidad, direccion_entrega)
         mycursor.execute(sql, values)
         mydb.commit()
         mydb.close()

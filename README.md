@@ -54,6 +54,8 @@ export DB_NAME=
 export BROKER_HOST=
 export DB_READ_NAME=
 export DB_READ_HOSTNAME=
+export PULSAR_ENV=
+export PRODUCTS_URL=
 ```
 
 ### Crear ambiente con conda

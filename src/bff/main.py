@@ -3,14 +3,12 @@ import os
 from bff import dispatchers
 from bff.model import Order
 import xmltodict, json
-
+import requests
 
 app = Flask(__name__)
 
-
-@app.route('/start', methods=['POST'])
+@app.route('/orders', methods=['POST'])
 def PublishOrder():
-
     if request.method == 'POST':
         try:
             if (request.headers['Content-Type'] == 'application/xml'):
@@ -35,6 +33,17 @@ def PublishOrder():
 
         return jsonify({'mssg': 'Procesando mensaje'}), 203
 
+@app.route('/productos', methods=['GET'])
+def GetProducts():
+    products_url = os.getenv("PRODUCTS_URL", default="localhost:3000")
+    response = requests.get(f'http://{products_url}/productos')
+    return response.json(), response.status_code
+
+@app.route('/productos/<id>', methods=['GET'])
+def GetProduct(id):
+    products_url = os.getenv("PRODUCTS_URL", default="localhost:3000")
+    response = requests.get(f'http://{products_url}/productos/{id}')
+    return response.json(), response.status_code
 
 @app.route('/health', methods=['GET'])
 def Health():

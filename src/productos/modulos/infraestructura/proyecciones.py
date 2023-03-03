@@ -24,21 +24,23 @@ class ProyeccionModificacionProducto(ProyeccionProducto):
         if not session:
             logging.error('ERROR: DB del app no puede ser nula')
             return
-
-        record = session.query(ProductoDTO).filter_by(id=self.id).one_or_none()
-        if record != None:
-            record.nombre = self.nombre
-            record.stock = self.stock
-            record.fecha_actualizacion = self.fecha_actualizacion
-        else:
-            new_record = ProductoDTO()
-            new_record.fecha_creacion = self.fecha_creacion
-            new_record.fecha_actualizacion = self.fecha_actualizacion
-            new_record.id = self.id
-            new_record.nombre = self.nombre
-            new_record.stock = self.stock
-            session.add(new_record)
-        session.commit()
+        try:
+            record = session.query(ProductoDTO).filter_by(id=self.id).one_or_none()
+            if record != None:
+                record.nombre = self.nombre
+                record.stock = self.stock
+                record.fecha_actualizacion = self.fecha_actualizacion
+            else:
+                new_record = ProductoDTO()
+                new_record.fecha_creacion = self.fecha_creacion
+                new_record.fecha_actualizacion = self.fecha_actualizacion
+                new_record.id = self.id
+                new_record.nombre = self.nombre
+                new_record.stock = self.stock
+                session.add(new_record)
+            session.commit()
+        except:
+            session.rollback()
 
 class ProyeccionEliminarProducto(ProyeccionProducto):
     def __init__(self, id):

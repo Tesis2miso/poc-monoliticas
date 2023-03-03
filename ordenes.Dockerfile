@@ -13,4 +13,4 @@ ENV MULTIPLICACION_MS localhost:8080
 
 ENTRYPOINT [ "python" ]
 
-CMD ["ordenes.py" ]
+CMD ["consumer.py" ]

@@ -1,7 +1,7 @@
 
 
 import mysql.connector
-from session import connect_db
+from session import connect_db, connect_db_replica
 from datetime import datetime
 
 class DbExecutor:
@@ -10,6 +10,20 @@ class DbExecutor:
 
     def create_order(self,id_orden, id_producto, user_id, cantidad, direccion_entrega ):
         mydb = connect_db()
+        mycursor = mydb.cursor()
+        sql = "INSERT INTO ordenes (id_orden, id_producto, user_id, time_stamp, cantidad, direccion_entrega) VALUES (%s, %s, %s, %s, %s, %s)"
+        values = (id_orden, id_producto, user_id, datetime.now(), cantidad, direccion_entrega)
+        mycursor.execute(sql, values)
+        mydb.commit()
+        mydb.close()
+
+
+class DbExecutorReplica:
+    def __init__(self):
+        pass
+
+    def create_order(self,id_orden, id_producto, user_id, cantidad, direccion_entrega ):
+        mydb = connect_db_replica()
         mycursor = mydb.cursor()
         sql = "INSERT INTO ordenes (id_orden, id_producto, user_id, time_stamp, cantidad, direccion_entrega) VALUES (%s, %s, %s, %s, %s, %s)"
         values = (id_orden, id_producto, user_id, datetime.now(), cantidad, direccion_entrega)

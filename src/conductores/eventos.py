@@ -1,16 +1,6 @@
 import uuid
-
 from pulsar.schema import *
-
 from utils import time_millis
-
-class OrdenCreada(Record):
-    id_orden = String()
-    id_producto = String()
-    user_id = String()
-    time_stamp = String()
-    cantidad = Integer()
-    direccion_entrega = String()
 
 
 class Mensaje(Record):
@@ -25,16 +15,19 @@ class Mensaje(Record):
     def __init__(self, *args, id=None, **kwargs):
         super().__init__(*args, id=id, **kwargs)
 
+
 class ComandoIntegracion(Mensaje):
     ...
 
-class ComandoDismunirStockPayload(ComandoIntegracion):
+
+class ComandoAsignarConductorPayload(ComandoIntegracion):
     id_producto = String()
     id_orden = String()
     cantidad = Integer()
     direccion_entrega = String()
 
-class ComandoDismunirStock(ComandoIntegracion):
+
+class ComandoAsignarConductor(ComandoIntegracion):
     id = String(default=str(uuid.uuid4()))
     time = Long()
     ingestion = Long(default=time_millis())
@@ -42,9 +35,21 @@ class ComandoDismunirStock(ComandoIntegracion):
     type = String()
     datacontenttype = String()
     service_name = String()
-    data = ComandoDismunirStockPayload()
+    data = ComandoAsignarConductorPayload()
+
 
 class ComandoMarcarListoDespachoPayload(ComandoIntegracion):
     id_orden = String()
     id_conductor = String()
     direccion_entrega = String()
+
+
+class ComandoMarcarListoDespacho(ComandoIntegracion):
+    id = String(default=str(uuid.uuid4()))
+    time = Long()
+    ingestion = Long(default=time_millis())
+    specversion = String()
+    type = String()
+    datacontenttype = String()
+    service_name = String()
+    data = ComandoMarcarListoDespachoPayload()

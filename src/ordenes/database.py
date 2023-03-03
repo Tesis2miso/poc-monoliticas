@@ -11,8 +11,17 @@ class DbExecutor:
     def create_order(self,id_orden, id_producto, user_id, cantidad, direccion_entrega ):
         mydb = connect_db()
         mycursor = mydb.cursor()
-        sql = "INSERT INTO ordenes (id_orden, id_producto, user_id, time_stamp, cantidad, direccion_entrega) VALUES (%s, %s, %s, %s, %s, %s)"
-        values = (id_orden, id_producto, user_id, datetime.now(), cantidad, direccion_entrega)
+        sql = "INSERT INTO ordenes (id_orden, id_producto, user_id, time_stamp, cantidad, direccion_entrega, estado) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+        values = (id_orden, id_producto, user_id, datetime.now(), cantidad, direccion_entrega, "creada")
+        mycursor.execute(sql, values)
+        mydb.commit()
+        mydb.close()
+
+    def update_order_status(self, id_orden, id_conductor):
+        mydb = connect_db()
+        mycursor = mydb.cursor()
+        sql = "UPDATE ordenes SET estado = 'iniciada',id_conductor = %s  where id_orden = %s"
+        values = (id_conductor, id_orden)
         mycursor.execute(sql, values)
         mydb.commit()
         mydb.close()
@@ -25,8 +34,17 @@ class DbExecutorReplica:
     def create_order(self,id_orden, id_producto, user_id, cantidad, direccion_entrega ):
         mydb = connect_db_replica()
         mycursor = mydb.cursor()
-        sql = "INSERT INTO ordenes (id_orden, id_producto, user_id, time_stamp, cantidad, direccion_entrega) VALUES (%s, %s, %s, %s, %s, %s)"
-        values = (id_orden, id_producto, user_id, datetime.now(), cantidad, direccion_entrega)
+        sql = "INSERT INTO ordenes (id_orden, id_producto, user_id, time_stamp, cantidad, direccion_entrega, estado) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+        values = (id_orden, id_producto, user_id, datetime.now(), cantidad, direccion_entrega, "creada")
+        mycursor.execute(sql, values)
+        mydb.commit()
+        mydb.close()
+
+    def update_order_status(self, id_orden, id_conductor):
+        mydb = connect_db_replica()
+        mycursor = mydb.cursor()
+        sql = "UPDATE ordenes SET estado = 'iniciada',id_conductor = %s  where id_orden = %s"
+        values = (id_conductor, id_orden)
         mycursor.execute(sql, values)
         mydb.commit()
         mydb.close()

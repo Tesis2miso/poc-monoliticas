@@ -2,7 +2,7 @@ import pulsar
 from pulsar.schema import *
 import uuid
 from utils import broker_host, time_millis
-from eventos import OrdenCreada, ComandoDismunirStockPayload, ComandoDismunirStock
+from eventos import OrdenCreada, ComandoDismunirStockPayload, ComandoDismunirStock, ComandoMarcarListoDespachoPayload
 from database import DbExecutor, DbExecutorReplica
 from datetime import datetime
 
@@ -28,7 +28,8 @@ def escuchar_mensaje(topico, schema=Record):
         print(f"consumed message {id_producto}")
 
         db = DbExecutor()
-        db.create_order(str(uuid.uuid4()), id_producto, user_id, cantidad, direccion_entrega)
+        order_id = str(uuid.uuid4())
+        db.create_order(order_id, id_producto, user_id, cantidad, direccion_entrega)
 
 
         db_replica = DbExecutorReplica()
@@ -44,7 +45,7 @@ def escuchar_mensaje(topico, schema=Record):
             service_name="1",
             data=ComandoDismunirStockPayload(
                 id_producto=id_producto,
-                id_orden=str(1),
+                id_orden=order_id,
                 cantidad=cantidad,
                 direccion_entrega=direccion_entrega
             )
@@ -58,4 +59,35 @@ def escuchar_mensaje(topico, schema=Record):
     cliente.close()
 
 
+def escuchar_mensaje_conductores(topico, schema=Record):
+    cliente = pulsar.Client(f'pulsar://{broker_host()}:6650')
+    consumer = cliente.subscribe(topico, schema=AvroSchema(schema), subscription_name='evento')
+    while True:
+        msg = consumer.receive()
+        message = msg.value()
+
+        consumer.acknowledge(msg)
+
+        id_orden = message.id_orden
+        id_conductor = message.id_conductor
+        direccion_entrega = message.direccion_entrega
+
+        print(f"consumed message driver {id_producto}")
+
+        db = DbExecutor()
+        db.update_order_status(id_orden, id_conductor)
+
+
+        db_replica = DbExecutorReplica()
+        db_replica.update_order_status(id_orden, id_conductor)
+
+        print("finish")
+
+    cliente.close()
+
+
+
+
+
 escuchar_mensaje(topico, OrdenCreada)
+escuchar_mensaje_conductores("comando-marcar-listo-despacho", ComandoMarcarListoDespachoPayload)

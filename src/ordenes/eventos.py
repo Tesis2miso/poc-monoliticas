@@ -43,3 +43,8 @@ class ComandoDismunirStock(ComandoIntegracion):
     datacontenttype = String()
     service_name = String()
     data = ComandoDismunirStockPayload()
+
+class ComandoMarcarListoDespachoPayload(ComandoIntegracion):
+    id_orden = String()
+    id_conductor = String()
+    direccion_entrega = String()

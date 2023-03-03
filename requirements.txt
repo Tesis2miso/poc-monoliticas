@@ -27,3 +27,4 @@ pulsar-client[avro]==2.10.1
 fastapi==0.89.1
 uvicorn[standard]==0.20.0
 requests==2.28.2
+xmltodict==0.13.0

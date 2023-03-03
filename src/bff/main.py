@@ -15,10 +15,10 @@ def PublishOrder():
         try:
             if (request.headers['Content-Type'] == 'application/xml'):
                 objJson = xmltodict.parse(request.get_data())
-                id_producto = objJson['root'].get('id_producto')
-                user_id = objJson['root'].get('user_id')
-                cantidad = int(objJson['root'].get('cantidad'))
-                direccion_entrega = objJson['root'].get('direccion_entrega')
+                id_producto = objJson[list(objJson)[0]].get('id_producto')
+                user_id = objJson[list(objJson)[0]].get('user_id')
+                cantidad = int(objJson[list(objJson)[0]].get('cantidad'))
+                direccion_entrega = objJson[list(objJson)[0]].get('direccion_entrega')
             else:
                 id_producto = request.json["id_producto"]
                 user_id = request.json["user_id"]

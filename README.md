@@ -11,9 +11,21 @@ PoC para curso monoliticas
 
 ## Arquitectura
 
-## Escenarios de calidad a probar
+En el siguiente diagrama se puede ver los componentes y topicos principales al igual que su interacción.
+
+![Base monoliticas drawio (1)](https://user-images.githubusercontent.com/16025512/222797394-c0005067-1ea4-4c8e-8f3d-bddefd65a9f3.png)
+
+De igual forma el siguiente diagrama presenta a nivel de componentes como fueron desplegados
+
+![Base monoliticas drawio (2)](https://user-images.githubusercontent.com/16025512/222797509-9463e90c-7b79-4334-8a1f-b96f05d5a8dd.png)
 
 ## DDD
+
+En este diagrama se pueden ver los contextos acotados implementados junto con sus dominios
+
+![Base monoliticas drawio](https://user-images.githubusercontent.com/16025512/222797116-9794b27a-7f93-4699-9163-bfe2f449a1ed.png)
+
+## Escenarios de calidad a probar
 
 ## Justificaciones
 

@@ -4,6 +4,7 @@ import logging
 import traceback
 import uuid
 import time
+import os
 
 def time_millis():
     return int(time.time() * 1000)
@@ -41,7 +42,7 @@ class ComandoAsignarConductor(ComandoIntegracion):
 
 def suscribirse_a_topico(topico: str, suscripcion: str):
     cliente = None
-    BROKER_HOST = 'localhost'
+    BROKER_HOST = os.getenv('BROKER_HOST', default="localhost")
     try:
         cliente = pulsar.Client(f'pulsar://{BROKER_HOST}:6650')
         consumidor = cliente.subscribe(

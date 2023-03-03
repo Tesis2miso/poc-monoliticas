@@ -35,7 +35,29 @@ En este diagrama se pueden ver los contextos acotados implementados junto con su
 
 ##### Se justifica correctamente los tipos de eventos a utilizar (integración o carga de estado). Ello incluye la definición de los esquemas y evolución de los mismos.
 
-Justificacion
+Para el flujo de creación de órdenes y productos usamos una arquitectura basada en eventos tanto desde el BFF como en la interacción de todos los componentes por medio de una coreografia. En esta interacción usamos eventos de integración para todos los componentes y eventos de dominio para realizar proyecciones en la base de datos del componente de productos. Inicialmente usamos eventos de integración ya que necesitamos comunicar componentes que hacen parte de dominios diferentes y porque los datos a enviar por la cola de mensajes son limitados no son todos los de la orden si no los que se necesitan para cumplir con la serie de comandos a ejecutar, esto dado que no estamos duplicando información en la base de datos a excepción de los datos que se encuentran en los eventos. De igual forma, los eventos de dominio se usaron para notificar dentro del dominio de productos cuando sucedió una acción y asi permitir dispatchers escuchar estos eventos y que puedan realizar la proyección correspondiente en la base de datos dedicada a solo lectura promoviendo CQRS.
+
+En cuanto a la definición y evolución de esquemas hicimos uso de AVRO que obliga a que los microservicios tengan que cumplir con el esquema propuesto y en caso de no hacerlo no permite el envio de los mensajes ya que se lanza un error de schema incompatible. Apache Pulsar nos ayuda con su schema registry para poder hacer registro de cada uno de los schema de los mensajes, finalmente se cuenta con un specversion dentro de cada evento indicando la versión del schema, para que en caso de querer lanzar una nueva versión solo sea necesario registrar un nuevo schema.
+
+A continuación se presenta un ejemplo de una definición de un schema utilizado en los componentes.
+
+```python
+class ComandoAsignarConductorPayload(ComandoIntegracion):
+    id_producto = String()
+    id_orden = String()
+    cantidad = Integer()
+    direccion_entrega = String()
+
+class ComandoAsignarConductor(ComandoIntegracion):
+    id = String(default=str(uuid.uuid4()))
+    time = Long()
+    ingestion = Long(default=time_millis())
+    specversion = String()
+    type = String()
+    datacontenttype = String()
+    service_name = String()
+    data = ComandoAsignarConductorPayload()
+```
 
 ##### Justificó e implementó alguna de las topologías para la administración de dato
 

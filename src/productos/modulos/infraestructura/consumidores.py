@@ -8,6 +8,9 @@ from productos.seedwork.aplicacion.comandos import ejecutar_commando
 from productos.modulos.aplicacion.comandos.disminuir_stock import DisminuirStock
 from productos.modulos.aplicacion.comandos.crear_producto import CrearProducto
 from productos.modulos.aplicacion.mapeadores import MapeadorProductoDTOJson
+from productos.seedwork.infraestructura.proyecciones import ejecutar_proyeccion
+from productos.modulos.infraestructura.proyecciones import ProyeccionModificacionProducto
+from productos.modulos.dominio.entidades import Producto
 
 def suscribirse_a_evento(topico: str, suscripcion: str, schema: Record, funcion_evento, app=None):
     cliente = None
@@ -67,7 +70,14 @@ def suscribirse_a_comando_disminuir_stock(app=None):
                     datos.id_producto, datos.id_orden,
                     datos.cantidad, datos.direccion_entrega
                 )
-                ejecutar_commando(comando)
+                producto: Producto = ejecutar_commando(comando)
+                ejecutar_proyeccion(
+                    ProyeccionModificacionProducto(
+                        producto.id, producto.nombre,
+                        producto.stock, producto.fecha_creacion,
+                        producto.fecha_actualizacion
+                    ), app=app
+                )
         except:
             logging.error('ERROR: Procesando eventos!')
             traceback.print_exc()
@@ -90,7 +100,14 @@ def suscribirse_a_comando_crear_producto(app=None):
                     producto_dto.fecha_actualizacion, producto_dto.id,
                     producto_dto.nombre, producto_dto.stock
                 )
-                ejecutar_commando(comando)
+                producto: Producto = ejecutar_commando(comando)
+                ejecutar_proyeccion(
+                    ProyeccionModificacionProducto(
+                        producto.id, producto.nombre,
+                        producto.stock, producto.fecha_creacion,
+                        producto.fecha_actualizacion
+                    ), app=app
+                )
         except:
             logging.error('ERROR: Procesando eventos!')
             traceback.print_exc()

@@ -18,14 +18,12 @@ class RepositorioProductosSQLAlchemy(RepositorioProductos):
         return self._fabrica_productos
 
     def obtener_por_id(self, id: UUID) -> Producto:
-        self.verification()
         read_session = orm.scoped_session(orm.sessionmaker())(bind=engine)
         producto_dto = read_session.query(ProductoDTO).filter_by(id=str(id)).one()
         read_session.close()
         return self.fabrica_productos.crear_objeto(producto_dto, MapeadorProducto())
 
     def obtener_todos(self) -> list[Producto]:
-        self.verification()
         read_session = orm.scoped_session(orm.sessionmaker())(bind=engine)
         productos_dto = read_session.query(ProductoDTO).all()
         read_session.close()
@@ -48,9 +46,3 @@ class RepositorioProductosSQLAlchemy(RepositorioProductos):
 
     def eliminar(self, id: UUID):
         db.session.query(ProductoDTO).filter_by(id=str(id)).delete()
-
-    def verification(self):
-        try:
-            read_session.commit()
-        except:
-            read_session.rollback()

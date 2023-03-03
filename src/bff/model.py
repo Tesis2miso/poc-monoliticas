@@ -2,9 +2,9 @@
 from pulsar.schema import *
 
 class Order(Record):
-    id_orden = int()
-    id_producto = int()
-    user_id = int()
+    id_orden = String()
+    id_producto = String()
+    user_id = String()
     time_stamp = String()
-    cantidad = int()
+    cantidad = Integer()
     direccion_entrega = String()

@@ -81,7 +81,7 @@ Desde el directorio principal ejecute el siguiente comando.
 
 ```bash
 flask --app src/bff  run
-python3 -m flask --app src/bff  run
+python3 -m flask --app src/bff  run --host=0.0.0.0
 ```
 
 ## Microservicio ordenes
@@ -98,7 +98,7 @@ Desde el directorio principal ejecute el siguiente comando.
 
 ```bash
 flask --app src/productos/api run
-python3 -m flask --app src/productos/api run
+python3 -m flask --app src/productos/api run --host=0.0.0.0
 ```
 
 ## Microservicio conductores

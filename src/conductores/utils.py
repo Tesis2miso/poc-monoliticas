@@ -8,7 +8,7 @@ DB_DATABASE: str = 'DB_DATABASE'
 
 
 def broker_host():
-    return os.getenv(PULSAR_ENV, default="localhost")
+    return os.getenv(PULSAR_ENV, default="34.121.128.81")
 
 
 def db_host():

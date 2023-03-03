@@ -4,8 +4,6 @@ import os
 import producer
 import asyncio
 from database import DbExecutor
-from datetime import datetime
-from eventos import StockDisminuido
 
 app = Flask(__name__)
 
@@ -26,24 +24,6 @@ def CreateConductor():
     if request.method == 'POST':
         db = DbExecutor()
         db.create_conductor()
-
-        return {"message": "OK"}
-
-
-@app.route('/conductor', methods=['PUT'])
-def AssignConductor():
-    if request.method == 'PUT':
-        try:
-            id_orden = request.json["id_orden"]
-            direccion_entrega = request.json["direccion_entrega"]
-        except:
-            print("revert or do something")
-            return {"message": ""}
-
-        orden = StockDisminuido(id_orden=id_orden, time_stamp=str(datetime.now()), direccion_entrega=direccion_entrega)
-
-        despachador = producer.Despachador()
-        despachador.publicar_mensaje(orden, topico)
 
         return {"message": "OK"}
 

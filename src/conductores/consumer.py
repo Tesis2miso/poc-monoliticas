@@ -11,6 +11,7 @@ def escuchar_mensaje(topico, schema=Record):
     cliente = pulsar.Client(f'pulsar://{broker_host()}:6650')
     consumer = cliente.subscribe(topico, schema=AvroSchema(schema), subscription_name='evento')
     while True:
+        print('Llego mensaje')
         msg = consumer.receive()
         message = msg.value()
 
@@ -23,7 +24,9 @@ def escuchar_mensaje(topico, schema=Record):
         id_conductor = db.get_unassigned_conductor()
 
         if id_conductor:
+            print('Asignando conductor')
             db.assign_conductor(id_conductor, id_orden, direccion_entrega)
+            print('Conductor asignado')
 
             evento = ComandoMarcarListoDespacho(
                 time=time_millis(),
@@ -41,10 +44,12 @@ def escuchar_mensaje(topico, schema=Record):
             despachador = producer.Despachador()
             despachador.publicar_mensaje(evento, "comando-marcar-listo-despacho")
 
+            print('Despachar enviado!')
+
         else:
             raise Exception("No hay ningun conductor disponible, regla de negocio")
 
     cliente.close()
 
 
-escuchar_mensaje("evento-asignar-conductor", ComandoAsignarConductor)
+escuchar_mensaje("comando-asignar-conductor", ComandoAsignarConductor)

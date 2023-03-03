@@ -153,6 +153,20 @@ Desde el directorio principal ejecute el siguiente comando.
 python3 src/conductores/consumer.py
 ```
 
+## k6 load testing
+
+Para ejecutar las pruebas de k6 hay que instalar con el siguiente comando la libreria
+
+```bash
+npm i -g k6
+```
+
+Y luego ejecutar el archivo con el siguiente comando
+
+```bash
+k6 run <RUTA_ARCHIVO>
+```
+
 ## Utils
 ### Correr pulsar
 

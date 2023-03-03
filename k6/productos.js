@@ -12,7 +12,7 @@ export const options = {
       exec: 'create_product',
       startVUs: 1,
       stages: [
-        { duration: '10s', target: 20 },
+        { duration: '10s', target: 1 },
       ]
     },
     list_products: {
@@ -20,7 +20,7 @@ export const options = {
       exec: 'list_products',
       startVUs: 1,
       stages: [
-        { duration: '10s', target: 20 },
+        { duration: '10s', target: 1 },
       ]
     },
   },

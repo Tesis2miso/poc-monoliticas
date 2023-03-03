@@ -12,9 +12,7 @@ export const options = {
       exec: 'create_product',
       startVUs: 1,
       stages: [
-        { duration: '5s', target: 1 },
-        { duration: '0m', target: 1 },
-        { duration: '0m', target: 0 },
+        { duration: '10s', target: 20 },
       ]
     },
     list_products: {
@@ -22,19 +20,12 @@ export const options = {
       exec: 'list_products',
       startVUs: 1,
       stages: [
-        { duration: '1s', target: 1 },
-        { duration: '0m', target: 1 },
-        { duration: '0m', target: 0 },
+        { duration: '10s', target: 20 },
       ]
     },
   },
-  // So we get count in the summary, to demonstrate different metrics are different
   summaryTrendStats: ['avg', 'min', 'med', 'max', 'p(90)', 'p(95)', 'p(99)', 'count'],
-  thresholds: {
-    // Intentionally empty. We'll programatically define our bogus
-    // thresholds (to generate the sub-metrics) below. In your real-world
-    // load test, you can add any real threshoulds you want here.
-  }
+  thresholds: {}
 };
 
 for (let key in options.scenarios) {

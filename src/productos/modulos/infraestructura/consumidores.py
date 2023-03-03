@@ -22,6 +22,8 @@ def suscribirse_a_evento(topico: str, suscripcion: str, schema: Record, funcion_
         while True:
             mensaje = consumidor.receive()
             datos = mensaje.value().data
+            print("\n")
+            print(datos)
             print(f'Evento recibido: {datos}')
             funcion_evento(datos, app)
             consumidor.acknowledge(mensaje)     
@@ -45,6 +47,9 @@ def suscribirse_a_comando(topico: str, suscripcion: str, schema: Record, funcion
         while True:
             mensaje = consumidor.receive()
             datos = mensaje.value().data
+            print("\n")
+            print(datos)
+            print(f'Comando recibido: {datos}')
             funcion_comando(datos, app)
             consumidor.acknowledge(mensaje)     
         cliente.close()

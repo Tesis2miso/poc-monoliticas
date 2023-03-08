@@ -4,6 +4,7 @@ PULSAR_ENV: str = 'BROKER_HOST'
 DB_ENV: str = 'DB_HOST'
 DB_USER_ENV: str = 'DB_USER'
 DB_DATABASE: str = 'DB_DATABASE'
+DB_READ_ENV: str = 'DB_READ_ENV'
 
 def broker_host():
     return os.getenv(PULSAR_ENV, default="34.121.128.81")
@@ -19,7 +20,7 @@ def db_database():
 
 
 def db_host_replica():
-    return os.getenv(DB_ENV, default="35.226.225.189")
+    return os.getenv(DB_READ_ENV, default="35.226.225.189")
 
 def db_user_replica():
     return os.getenv(DB_USER_ENV, default="root")

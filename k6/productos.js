@@ -53,7 +53,7 @@ export function create_product() {
   };
 
   let res = http.post(
-    `http://34.70.186.96:3001/productos`,
+    `http://34.27.9.44:3001/productos`,
     JSON.stringify(body),
     { headers: headers }
   );
@@ -67,7 +67,7 @@ export function list_products() {
   //let randomIndex = Math.floor(Math.random() * data.length);
   let headers = {};
   let res = http.get(
-    `http://34.70.186.96:3001/productos`,
+    `http://34.27.9.44:3001/productos`,
     { headers: headers }
   );
 

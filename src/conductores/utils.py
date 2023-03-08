@@ -2,7 +2,7 @@ import os
 import time
 
 PULSAR_ENV: str = 'BROKER_HOST'
-DB_ENV: str = 'DB_HOST'
+DB_HOSTNAME: str = 'DB_HOSTNAME'
 DB_USER_ENV: str = 'DB_USER'
 DB_DATABASE: str = 'DB_DATABASE'
 
@@ -12,7 +12,7 @@ def broker_host():
 
 
 def db_host():
-    return os.getenv(DB_ENV, default="34.68.216.107")
+    return os.getenv(DB_HOSTNAME, default="34.68.216.107")
 
 
 def db_user():

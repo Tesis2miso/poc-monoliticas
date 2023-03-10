@@ -3,3 +3,6 @@ data
 __pycache__
 venvf
 o-r5ais-admin.json
+.idea
+.vscode
+.DS_Store

@@ -2,8 +2,10 @@ from flask import Flask, request, jsonify
 import os
 from bff import dispatchers
 from bff.model import Order
+from model import Order
 import xmltodict, json
 import requests
+from database import DbExecutor
 
 app = Flask(__name__)
 
@@ -32,6 +34,23 @@ def PublishOrder():
         disp.publicar_mensaje(orden, "evento-ordenes-2")
 
         return jsonify({'mssg': 'Procesando mensaje'}), 203
+
+
+
+@app.route('/orders', methods=['GET'])
+def GetOrders():
+    if request.method == 'GET':
+        db = DbExecutor()
+        orders = db.get_orders()
+        return orders
+
+@app.route('/orders/<id>', methods=['GET'])
+def GetOrdersByID(id):
+    if request.method == 'GET':
+        db = DbExecutor()
+        print(type(id))
+        order = db.get_orders_id(id)
+        return order
 
 @app.route('/productos', methods=['GET'])
 def GetProducts():

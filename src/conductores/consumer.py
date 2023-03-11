@@ -70,7 +70,7 @@ def escuchar_mensaje(topico, schema=Record):
             )
 
             despachador = producer.Despachador()
-            despachador.publicar_mensaje(evento, "comando-asignar-conductor")
+            despachador.publicar_mensaje(evento, "comando-revertir-disminuir-stock")
 
             print("No hay ningun conductor disponible, regla de negocio")
 

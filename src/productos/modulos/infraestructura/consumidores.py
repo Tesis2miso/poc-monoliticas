@@ -145,6 +145,6 @@ def suscribirse_a_comando_revertir_disminuir_stock(app=None):
             traceback.print_exc()
 
     suscribirse_a_comando(
-        "comando-asignar-conductor", "sub-com-asignar-conductor",
+        "comando-revertir-disminuir-stock", "sub-com-revertir-disminuir-stock",
         ComandoRevertirDisminuirStock, procesar, app
     )

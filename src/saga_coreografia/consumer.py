@@ -8,6 +8,8 @@ TOPICO_ORDEN_CREADA = "evento-ordenes-2"
 TOPICO_DISMINUIR_STOCK = "comando-disminuir-stock"
 TOPICO_ASIGNAR_CONDUCTOR = "comando-asignar-conductor"
 TOPICO_LISTO_DESPACHO = "comando-marcar-listo-despacho-2"
+TOPICO_REVERTIR_DISMINUIR_STOCK = "comando-revertir-disminuir-stock"
+TOPICO_REVERTIR_ORDEN_CREADA = "comando-revertir-orden-creada"
 
 
 def escuchar_mensaje_orden_creada():
@@ -69,7 +71,7 @@ def escuchar_mensaje_asignar_conductor():
 
 def escuchar_mensaje_revertir_disminuir_stock():
     cliente = pulsar.Client(f'pulsar://{broker_host()}:6650')
-    consumer = cliente.subscribe(TOPICO_ASIGNAR_CONDUCTOR, schema=AvroSchema(ComandoRevertirDisminuirStock), subscription_name='evento')
+    consumer = cliente.subscribe(TOPICO_REVERTIR_DISMINUIR_STOCK, schema=AvroSchema(ComandoRevertirDisminuirStock), subscription_name='evento')
     while True:
         msg = consumer.receive()
         message = msg.value()
@@ -88,7 +90,7 @@ def escuchar_mensaje_revertir_disminuir_stock():
 
 def escuchar_mensaje_revertir_crear_orden():
     cliente = pulsar.Client(f'pulsar://{broker_host()}:6650')
-    consumer = cliente.subscribe(TOPICO_DISMINUIR_STOCK, schema=AvroSchema(ComandoRevertirOrdenCreada), subscription_name='evento')
+    consumer = cliente.subscribe(TOPICO_REVERTIR_ORDEN_CREADA, schema=AvroSchema(ComandoRevertirOrdenCreada), subscription_name='evento')
     while True:
         msg = consumer.receive()
         message = msg.value()

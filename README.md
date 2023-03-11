@@ -191,6 +191,14 @@ pip install -r requirements.txt
 pip install -r conductores-requirements.txt
 ```
 
+## Saga
+
+Desde el directorio principal ejecute el siguiente comando.
+
+```bash
+python3 src/saga_coreografia/main.py
+```
+
 ## Microservicio BFF
 
 Desde el directorio principal ejecute el siguiente comando.

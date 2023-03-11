@@ -26,7 +26,7 @@ def escuchar_mensaje(topico, schema=Record):
         db = DbExecutor()
 
         id_conductor = None
-        if len(db.get_unassigned_conductor()) > 0:
+        if db.get_unassigned_conductor() and len(db.get_unassigned_conductor()) > 0:
             id_conductor = db.get_unassigned_conductor()[0]
 
         print(f"el id del conductor es {id_conductor}")

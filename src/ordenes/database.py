@@ -62,7 +62,7 @@ class DbExecutorReplica:
         mydb = connect_db_replica()
         mycursor = mydb.cursor()
         sql = "UPDATE ordenes SET estado = 'fallida' WHERE id_orden = %s"
-        values = (id_orden)
+        values = (id_orden,)
         mycursor.execute(sql, values)
         mydb.commit()
         mydb.close()

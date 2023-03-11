@@ -9,16 +9,16 @@ class DbExecutor:
     def create_table_sagalog(self):
         mydb = connect_db()
         mycursor = mydb.cursor()
-        sql = "CREATE TABLE sagalog (transaction_id VARCHAR(255) PRIMARY KEY, timestamp VARCHAR(255) NULL, tipo VARCHAR(255) NULL, detalle VARCHAR(255) NULL)"
+        sql = "CREATE TABLE sagalog (transaction_id VARCHAR(255) PRIMARY KEY, timestamp VARCHAR(255) NULL, is_compensation BOOLEAN NULL, evento VARCHAR(255) NULL, contenido VARCHAR(255) NULL)"
         mycursor.execute(sql)
         mydb.commit()
         mydb.close()
 
-    def insert_log(self, transaction_id, tipo, detalle):
+    def insert_log(self, transaction_id: str, is_compensation: bool, evento: str, contenido: str):
         mydb = connect_db()
         mycursor = mydb.cursor()
-        sql = "INSERT INTO sagalog (transaction_id, timestamp, tipo, detalle) VALUES (%s, %s, %s, %s)"
-        values = (transaction_id, datetime.now(), tipo, detalle)
+        sql = "INSERT INTO sagalog (transaction_id, timestamp, is_compensation, evento, contenido) VALUES (%s, %s, %s, %s, %s)"
+        values = (transaction_id, datetime.now(), is_compensation, evento, contenido)
         mycursor.execute(sql, values)
         mydb.commit()
         mydb.close()

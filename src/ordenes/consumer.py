@@ -30,7 +30,7 @@ def escuchar_mensaje(topico, schema=Record):
 
         db = DbExecutor()
         order_id = str(uuid.uuid4())
-        db.create_order(order_id, id_producto, user_id, cantidad, direccion_entrega, transaction_id)
+        db.create_order(order_id, id_producto, user_id, cantidad, direccion_entrega)
 
 
         db_replica = DbExecutorReplica()

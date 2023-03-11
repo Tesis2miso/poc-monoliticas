@@ -36,7 +36,7 @@ class HandlerProductoIntegracion(Handler):
             datacontenttype=ComandoRevertirOrdenCreadaPayload.__name__,
             specversion=Config.SPEC_VERSION,
             service_name=Config.SERVICE_NAME,
-            data=ComandoAsignarConductorPayload(
+            data=ComandoRevertirOrdenCreadaPayload(
                 id_producto=str(evento.id_producto),
                 id_orden=str(evento.id_orden),
                 transaction_id=evento.transaction_id

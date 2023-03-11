@@ -116,6 +116,6 @@ def escuchar_mensaje_revertir_orden_creada(topico, schema=Record):
 
 
 threading.Thread(target=escuchar_mensaje, args=[topico, OrdenCreada]).start()
-threading.Thread(target=escuchar_mensaje_revertir_orden_creada, args=["comando-disminuir-stock", ComandoRevertirOrdenCreada]).start()
+threading.Thread(target=escuchar_mensaje_revertir_orden_creada, args=["comando-revertir-orden-creada", ComandoRevertirOrdenCreada]).start()
 
 escuchar_mensaje_conductores("comando-marcar-listo-despacho-2", ComandoMarcarListoDespacho)

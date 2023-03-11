@@ -42,4 +42,4 @@ class HandlerProductoIntegracion(Handler):
                 transaction_id=evento.transaction_id
             )
         )
-        despachador.publicar_mensaje(evento, "comando-disminuir-stock")
+        despachador.publicar_mensaje(evento, "comando-revertir-orden-creada")

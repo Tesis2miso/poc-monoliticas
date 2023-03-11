@@ -1,5 +1,5 @@
 import mysql.connector
-from utils import db_user, db_database, db_host
+from bff.utils import db_user, db_database, db_host
 
 
 def connect_db():

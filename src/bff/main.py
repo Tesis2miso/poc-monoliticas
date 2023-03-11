@@ -4,10 +4,9 @@ from flask import Flask, request, jsonify
 import os
 from bff import dispatchers
 from bff.model import Order
-from model import Order
 import xmltodict, json
 import requests
-from database import DbExecutor
+from bff.database import DbExecutor
 
 app = Flask(__name__)
 

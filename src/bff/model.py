@@ -8,3 +8,4 @@ class Order(Record):
     time_stamp = String()
     cantidad = Integer()
     direccion_entrega = String()
+    transaction_id = String()

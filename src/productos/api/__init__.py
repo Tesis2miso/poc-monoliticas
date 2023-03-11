@@ -3,16 +3,19 @@ from pydispatch import dispatcher
 from flask import Flask, render_template, request, url_for, redirect, jsonify, session
 from flask_swagger import swagger
 from productos.modulos.aplicacion.handlers import HandlerProductoIntegracion
-from productos.modulos.dominio.eventos.productos import StockDisminuido
+from productos.modulos.dominio.eventos.productos import StockDisminuido, RevertirStockDisminuido
 
 # Identifica el directorio base
 basedir = os.path.abspath(os.path.dirname(__file__))
 
+
 def registrar_handlers():
     import productos.modulos.aplicacion
 
+
 def importar_modelos_alchemy():
     import productos.modulos.infraestructura.dto
+
 
 def comenzar_consumidor(app):
     import threading
@@ -24,19 +27,22 @@ def comenzar_consumidor(app):
     # Suscripción a comandos
     threading.Thread(target=productos.suscribirse_a_comando_crear_producto, args=[app]).start()
     threading.Thread(target=productos.suscribirse_a_comando_disminuir_stock, args=[app]).start()
+    threading.Thread(target=productos.suscribirse_a_comando_revertir_disminuir_stock, args=[app]).start()
+
 
 def comenzar_dispatchers(app):
     dispatcher.connect(HandlerProductoIntegracion.handle_stock_disminuido, signal=f'{StockDisminuido.__name__}Integracion')
+    dispatcher.connect(HandlerProductoIntegracion.handle_revertir_orden_creada, signal=f'{RevertirStockDisminuido.__name__}Integracion')
 
 def create_app(configuracion={}):
     # Init la aplicacion de Flask
     app = Flask(__name__, instance_relative_config=True)
-    
+
     app.secret_key = '9d58f98f-3ae8-4149-a09f-3a8c2012e32c'
     app.config['SESSION_TYPE'] = 'filesystem'
     app.config['TESTING'] = configuracion.get('TESTING')
 
-     # Inicializa la DB
+    # Inicializa la DB
     from productos.config.db import init_db, database_connection
 
     app.config['SQLALCHEMY_DATABASE_URI'] = database_connection(configuracion, basedir=basedir)
@@ -54,12 +60,8 @@ def create_app(configuracion={}):
         if not app.config.get('TESTING'):
             comenzar_consumidor(app)
             comenzar_dispatchers(app)
-        
-        # TODO Saga
-        #from productos.modulos.sagas.aplicacion.coordinadores.saga_reservas import CoordinadorReservas
-        #CoordinadorReservas()
 
-     # Importa Blueprints
+    # Importa Blueprints
     from . import productos
 
     # Registro de Blueprints

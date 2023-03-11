@@ -12,3 +12,13 @@ class StockDisminuido(EventoProducto):
     id_orden: uuid.UUID = None
     cantidad: int = None
     direccion_entrega: str = None
+    transaction_id: uuid.UUID = None
+
+
+@dataclass
+class RevertirStockDisminuido(EventoProducto):
+    id_producto: uuid.UUID = None
+    id_orden: uuid.UUID = None
+    cantidad: int = None
+    direccion_entrega: str = None
+    transaction_id: uuid.UUID = None

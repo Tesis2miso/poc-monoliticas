@@ -2,6 +2,7 @@ import pulsar
 from pulsar.schema import *
 from productos.seedwork.infraestructura import utils
 
+
 class Despachador:
     def __init__(self):
         ...

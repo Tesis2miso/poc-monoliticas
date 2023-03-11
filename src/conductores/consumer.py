@@ -1,7 +1,7 @@
 import pulsar
 from pulsar.schema import *
 from utils import broker_host
-from eventos import ComandoAsignarConductor, ComandoMarcarListoDespacho, ComandoMarcarListoDespachoPayload
+from eventos import ComandoAsignarConductor, ComandoMarcarListoDespacho, ComandoMarcarListoDespachoPayload, ComandoRevertirDisminuirStock, ComandoRevertirDisminuirStockPayload
 from database import DbExecutor
 from utils import time_millis
 import producer
@@ -19,6 +19,10 @@ def escuchar_mensaje(topico, schema=Record):
         print(f'Llego mensaje {message}')
         id_orden = message.data.id_orden
         direccion_entrega = message.data.direccion_entrega
+        transaction_id = message.data.transaction_id
+        id_producto = message.data.id_producto
+        cantidad = message.data.cantidad
+
         db = DbExecutor()
 
         id_conductor = db.get_unassigned_conductor()[0]
@@ -39,7 +43,8 @@ def escuchar_mensaje(topico, schema=Record):
                 data=ComandoMarcarListoDespachoPayload(
                     id_orden=id_orden,
                     id_conductor=str(id_conductor),
-                    direccion_entrega=direccion_entrega
+                    direccion_entrega=direccion_entrega,
+                    transaction_id=transaction_id
                 )
             )
 
@@ -49,7 +54,25 @@ def escuchar_mensaje(topico, schema=Record):
             print('Despachar enviado!')
 
         else:
-            raise Exception("No hay ningun conductor disponible, regla de negocio")
+            evento = ComandoRevertirDisminuirStock(
+                time=time_millis(),
+                ingestion=time_millis(),
+                datacontenttype=ComandoRevertirDisminuirStockPayload.__name__,
+                specversion="1",
+                service_name="1",
+                data=ComandoRevertirDisminuirStockPayload(
+                    id_orden=id_orden,
+                    id_producto=str(id_producto),
+                    cantidad=cantidad,
+                    direccion_entrega=direccion_entrega,
+                    transaction_id=transaction_id
+                )
+            )
+
+            despachador = producer.Despachador()
+            despachador.publicar_mensaje(evento, "comando-asignar-conductor")
+
+            print("No hay ningun conductor disponible, regla de negocio")
 
     cliente.close()
 

@@ -6,7 +6,7 @@ from bff import dispatchers
 from bff.model import Order
 import xmltodict, json
 import requests
-from database import DbExecutor
+from bff.database import DbExecutor
 
 app = Flask(__name__)
 

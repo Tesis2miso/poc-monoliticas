@@ -34,8 +34,8 @@ def crear_producto_comando():
             time=utils.time_millis(),
             ingestion=utils.time_millis(),
             datacontenttype=ComandoCrearProductoPayload.__name__,
-            specversion="1",
-            service_name="1",
+            specversion="2",
+            service_name="2",
             data = ComandoCrearProductoPayload(
                 nombre=producto_dict['nombre'],
                 stock=producto_dict['stock'],

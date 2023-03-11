@@ -1,7 +1,7 @@
 
 
 import mysql.connector
-from session import connect_db
+from bff.session import connect_db
 from datetime import datetime
 
 class DbExecutor:

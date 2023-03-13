@@ -15,4 +15,4 @@ base = declarative_base()
 engine = sa.create_engine(f'mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_READ_HOSTNAME}/{DB_READ_NAME}', connect_args={'connect_timeout': 60})
 base.metadata.bind = engine
 session = orm.scoped_session(orm.sessionmaker())(bind=engine)
-base.metadata.create_all()
+base.metadata.create_all(bind=engine)

@@ -63,14 +63,14 @@ def GetOrdersByID(id):
 @app.route('/productos', methods=['GET'])
 def GetProducts():
     products_url = os.getenv("PRODUCTS_URL", default="localhost:3000")
-    response = requests.get(f'http://192.168.0.8:3000/productos')
+    response = requests.get(f'http://34.135.190.230:3001/productos')
     return response.json(), response.status_code
 
 
 @app.route('/productos/<id>', methods=['GET'])
 def GetProduct(id):
     products_url = os.getenv("PRODUCTS_URL", default="localhost:3000")
-    response = requests.get(f'http://192.168.0.8:3000/productos/{id}')
+    response = requests.get(f'http://34.135.190.230:3001/productos/{id}')
     return response.json(), response.status_code
 
 

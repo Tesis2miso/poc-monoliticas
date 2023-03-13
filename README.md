@@ -285,3 +285,54 @@ python ./testers/consumer_tester.py
 ```bash
 python ./testers/producer_tester.py
 ```
+
+### Links de interes
+- BFF (Listar ordenes):
+```
+curl --location 'http://34.135.190.230:3000/orders'
+```
+-BFF (Listar ordenes por ID):
+```
+curl --location 'http://34.135.190.230:3000/orders/6c7f3797-311e-4d88-a782-3ce93adacffe'
+```
+- BFF (Crear orden JSON):
+```
+curl --location 'http://34.135.190.230:3000/orders' \
+--header 'Content-Type: application/json' \
+--data '{
+    "id_producto": "07a438ad-f107-47f6-9948-8aba2d285b7f",
+    "user_id": "1",
+    "cantidad": 2,
+    "direccion_entrega": "Calle test json"
+}'
+```
+- BFF (Crear orden XML):
+```
+curl --location 'http://34.135.190.230:3000/orders' \
+--header 'Content-Type: application/xml' \
+--data '<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+  <id_producto>07a438ad-f107-47f6-9948-8aba2d285b7f</id_producto>
+  <user_id>1</user_id>
+  <cantidad>2</cantidad>
+  <direccion_entrega>Calle test xml</direccion_entrega>
+</root>'
+```
+- BFF (Listar productos):
+```
+curl --location --request GET 'http://34.135.190.230:3000/productos' \
+--header 'Content-Type: application/json' \
+--data '{
+    "nombre": "Test",
+    "stock": 10
+}'
+```
+- BFF (Obtener producto)
+```
+curl --location --request GET 'http://34.135.190.230:3000/productos/07a438ad-f107-47f6-9948-8aba2d285b7f' \
+--header 'Content-Type: application/json' \
+--data '{
+    "nombre": "Test",
+    "stock": 10
+}'
+```

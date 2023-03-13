@@ -49,5 +49,14 @@ class DbExecutor:
             "id_driver":input[7] if input[7] else "",
         }
         return res
+    
+    def create_order(self,id_orden, id_producto, user_id, cantidad, direccion_entrega, transaction_id, id_driver, estado):
+        mydb = connect_db()
+        mycursor = mydb.cursor()
+        sql = "INSERT INTO ordenes (id_orden, id_producto, user_id, time_stamp, cantidad, direccion_entrega, estado, id_driver) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+        values = (id_orden, id_producto, user_id, datetime.now(), cantidad, direccion_entrega, "iniciada", id_driver )
+        mycursor.execute(sql, values)
+        mydb.commit()
+        mydb.close()
 
     

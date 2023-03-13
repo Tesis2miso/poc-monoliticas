@@ -51,6 +51,7 @@ def index():
     try:
         query = ListarProductos()
         productos = ejecutar_query(query)
+        print("holaaa")
         return jsonify(productos)
     except ExcepcionDominio as e:
         return jsonify({ 'error': str(e)}), 400

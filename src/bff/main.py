@@ -7,6 +7,8 @@ from bff.model import Order
 import xmltodict, json
 import requests
 from bff.database import DbExecutor
+import math
+import random
 
 app = Flask(__name__)
 
@@ -29,11 +31,14 @@ def PublishOrder():
         except:
             return jsonify({'mssg': 'Bad request'}), 400
 
-        orden = Order(id_producto=id_producto, user_id=user_id,
-                      cantidad=cantidad, direccion_entrega=direccion_entrega, transaction_id=str(uuid.uuid4()))
+        # orden = Order(id_producto=id_producto, user_id=user_id,
+        #               cantidad=cantidad, direccion_entrega=direccion_entrega, transaction_id=str(uuid.uuid4()))
 
-        disp = dispatchers.Despachador()
-        disp.publicar_mensaje(orden, "evento-ordenes-2")
+        # disp = dispatchers.Despachador()
+        # disp.publicar_mensaje(orden, "evento-ordenes-2")
+
+        db = DbExecutor()
+        db.create_order(id_producto=id_producto, user_id=user_id, cantidad=cantidad, direccion_entrega=direccion_entrega, transaction_id=str(uuid.uuid4()), id_driver= 1, estado="iniciada", id_orden= str(random.randint(0, 9)) + "f3797-311e-4d88-a782-3ce93adacffe")
 
         return jsonify({'mssg': 'Procesando mensaje'}), 203
 
@@ -58,14 +63,14 @@ def GetOrdersByID(id):
 @app.route('/productos', methods=['GET'])
 def GetProducts():
     products_url = os.getenv("PRODUCTS_URL", default="localhost:3000")
-    response = requests.get(f'http://{products_url}/productos')
+    response = requests.get(f'http://192.168.0.8:3000/productos')
     return response.json(), response.status_code
 
 
 @app.route('/productos/<id>', methods=['GET'])
 def GetProduct(id):
     products_url = os.getenv("PRODUCTS_URL", default="localhost:3000")
-    response = requests.get(f'http://{products_url}/productos/{id}')
+    response = requests.get(f'http://192.168.0.8:3000/productos/{id}')
     return response.json(), response.status_code
 
 
